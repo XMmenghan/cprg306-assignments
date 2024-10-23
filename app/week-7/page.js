@@ -1,25 +1,27 @@
 "use client";
 
-import DogList from "./dog-list.js";
-import DogForm from "./dogform.js";
-import dogData from "./dog-data.json";
 import { useState } from "react";
+import ItemList from "./item-list";
+import NewItem from "./new-item";
+import itemsJson from "./item.json";
 
 export default function Page() {
-  const [dogs, setDogs] = useState(dogData);
+  const [items, setItems] = useState(itemsJson); // use itemsJson as initial state
 
-  const handleAddDog = (dog) => {
-    setDogs([...dogs, dog]); //add dog to the list, spread operator,dog is the new dog,
-  };
-
-  const handleDeleteDog = (id) => {
-    setDogs(dogs.filter((dog) => dog.id !== id)); //filter out the dog with the id that matches the id of the dog that was clicked
+  // handle adding new item
+  const handleAddItem = (newItem) => {
+    setItems((prevItems) => {
+      return [...prevItems, newItem];
+    });
   };
 
   return (
-    <div>
-      <DogList dogs={dogs} onDeletDog={handleDeleteDog} />
-      <DogForm onAddDog={handleAddDog} />
-    </div>
+    <main className="bg-[#020617] text-black-900">
+      <h1 className="text-[28px] text-white font-bold ml-5">Shopping List</h1>
+      {/* pass handleAddItem function to NewItem component */}
+      <NewItem onAddItem={handleAddItem} />
+      {/* pass items state to ItemList component */}
+      <ItemList items={items} />
+    </main>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
-//Remove all item variables (const item1 etc.) from the ItemList component.
-//Import the useState hook from React, the Item component, and the items from the JSON file.
+
 import Item from "./item";
 import { useState } from "react";
 
@@ -19,25 +18,26 @@ export default function ItemList({ items }) {
   return (
     <div>
       <div className="sort-buttons">
+        <label className="text-white font-bold ml-2">Sort By: </label>
         <button
           onClick={() => setSortBy("name")}
           className={
             sortBy === "name"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-black"
+              ? "bg-orange-500 p-1 m-2 w-28 text-white"
+              : "bg-orange-700 p-1 m-2 w-28 text-white"
           }
         >
-          Sort by Name
+          Name
         </button>
         <button
           onClick={() => setSortBy("category")}
           className={
             sortBy === "category"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-black"
+              ? "bg-orange-500 p-1 m-2 w-28 text-white"
+              : "bg-orange-700 p-1 m-2 w-28 text-white"
           }
         >
-          Sort by Category
+          Category
         </button>
       </div>
       <div>

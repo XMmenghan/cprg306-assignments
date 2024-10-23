@@ -1,11 +1,11 @@
 "use client";
-
 import { useState } from "react";
 
-export default function NewItem() {
+export default function NewItem({ onAddItem }) {
   const [count, setCount] = useState(1);
   const [category, setCategory] = useState("");
   const [itemName, setItemName] = useState("");
+
   const increment = () => setCount(count + 1);
   const decrement = () => {
     if (count > 1) {
@@ -15,10 +15,17 @@ export default function NewItem() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (itemName || category) {
-      alert(
-        `Added item: ${itemName}, quantity: ${count}, category: ${category.toLowerCase()}`
-      );
+    if (itemName && category) {
+      const newItem = {
+        id: Math.random().toString(36).substr(2, 9),
+        name: itemName,
+        quantity: count,
+        category: category.toLowerCase(),
+      };
+      onAddItem(newItem);
+      setItemName("");
+      setCount(1);
+      setCategory("");
     } else {
       alert("Please fill out all fields");
     }
@@ -32,39 +39,42 @@ export default function NewItem() {
       <div className="mb-2">
         <input
           type="text"
-          placeholder="Item name"
+          placeholder="Item Name"
+          value={itemName}
+          onChange={(e) => setItemName(e.target.value)}
           className="w-full mt-1 border-2 border-gray-300 p-2 rounded-lg font-sans"
         />
       </div>
-
-      <div className="flex justify-between">
-        <div className="p-2 m-1 rounded-md  bg-white text-white w-36">
-          <div className="flex justify-between">
-            <span className="text-black">{count}</span>
-            <div className="flex">
-              <button
-                type="button"
-                onClick={decrement}
-                className="w-8 bg-blue-500 text-white font-semibold
+      <div className="flex justify-between items-center ">
+        <div className=" flex justify-between p-2 m-1 rounded-md  bg-white text-white w-36">
+          <span className="text-black">{count}</span>
+          <div className="flex">
+            <button
+              type="button"
+              onClick={decrement}
+              className="w-8 bg-blue-500 text-white font-semibold
                 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2
                 disabled:bg-gray-400 focus:ring-blue-400 focus:ring-opacity-75"
-                disabled={count == 1}
-              >
-                -
-              </button>
-              <button
-                type="button"
-                onClick={increment}
-                className="w-8 bg-blue-500 text-white font-semibold
+              disabled={count == 1}
+            >
+              -
+            </button>
+            <button
+              type="button"
+              onClick={increment}
+              className="w-8 bg-blue-500 text-white font-semibold
                 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2
                 disabled:bg-gray-400 focus:ring-blue-400 focus:ring-opacity-75 ml-1"
-              >
-                +
-              </button>
-            </div>
+            >
+              +
+            </button>
           </div>
         </div>
-        <select className="m-1 p-2 rounded-lg">
+        <select
+          className="m-1 p-2 rounded-lg"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
           <option value disabled>
             Category
           </option>
