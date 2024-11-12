@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Item from "./item";
+import { useState, useEffect } from "react";
+import React from "react";
 
-export default function IdeaMeals({ ingredient }) {
+export default function MealIdeas({ ingredient }) {
   const [meals, setMeals] = useState(null);
   const [mealDetails, setMealDetails] = useState(null);
 

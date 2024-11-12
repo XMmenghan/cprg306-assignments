@@ -1,18 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ItemList from "./item-list";
-
-import initialItems from "./item.json";
 import NewItem from "./new-item";
-import IdeaMeals from "./meal-ideas";
+import itemsJson from "./item.json";
+import MealIdeas from "./meal-ideas";
 
 export default function Page() {
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState(itemsJson); // use itemsJson as initial state
   const [selectedItemName, setSelectedItemName] = useState("");
 
-  const handleAddItem = (item) => {
-    setItems((prevItems) => [...prevItems, item]);
+  // handle adding new item
+  const handleAddItem = (newItem) => {
+    setItems((prevItems) => {
+      return [...prevItems, newItem];
+    });
   };
 
   const handleItemSelect = (name) => {
@@ -24,15 +26,18 @@ export default function Page() {
   };
 
   return (
-    <main className="bg-slate-950 m-2">
-      <h1 className="text-5xl font-bold p-5">Shopping List</h1>
+    <main className="bg-[#020617] text-black-900">
+      <h1 className="text-[28px] text-white font-bold ml-5">Shopping List</h1>
       <div className="flex flex-row">
         <div>
+          {/* pass handleAddItem function to NewItem component */}
           <NewItem onAddItem={handleAddItem} />
+          {/* pass items state to ItemList component */}
           <ItemList items={items} onItemSelect={handleItemSelect} />
         </div>
         <div>
-          <IdeaMeals ingredient={selectedItemName} />
+          {/* pass selectedItemName state to IdeaMeals component */}
+          <MealIdeas ingredient={selectedItemName} />
         </div>
       </div>
     </main>

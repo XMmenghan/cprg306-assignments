@@ -1,111 +1,56 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import Item from "./item";
-import React from "react";
+import { useState } from "react";
 
 export default function ItemList({ items, onItemSelect }) {
   const [sortBy, setSortBy] = useState("name");
-  const [sortedItems, setSortedItems] = useState(items);
 
-  // Add useCallback to prevent infinite loop
-  const handleSort = useCallback(
-    (sortType) => {
-      setSortBy(sortType);
-      let sorted = [...items];
-      if (sortType === "name") {
-        sorted.sort((a, b) => a.name.localeCompare(b.name));
-      } else if (sortType === "category") {
-        sorted.sort((a, b) => a.category.localeCompare(b.category));
-      } else if (sortType == "group by category") {
-        setSortedItems(groupByCategory(items));
-        return;
-      }
-
-      setSortedItems(sorted);
-    },
-    [items]
-  );
-
-  // Items don't rerender when items from props changing, so we need to add useEffect to monitor.
-  useEffect(() => {
-    handleSort(sortBy);
-  }, [items, sortBy, handleSort]);
-
-  const groupByCategory = (items) => {
-    return items.reduce((acc, item) => {
-      if (!acc[item.category]) {
-        acc[item.category] = [];
-      }
-      acc[item.category].push(item);
-      return acc;
-    }, {});
-  };
-  const capitalizeWords = (str) => {
-    return str
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
+  const sortedItems = [...items].sort((a, b) => {
+    if (sortBy === "name") {
+      return a.name.localeCompare(b.name);
+    } else {
+      return a.category.localeCompare(b.category);
+    }
+    return 0;
+  });
 
   return (
-    <div className="m-5">
-      <div className="flex items-center">
-        <h2 className="text-xl mr-5">Sort By:</h2>
+    <div>
+      <div className="sort-buttons">
+        <label className="text-white font-bold ml-2">Sort By: </label>
         <button
-          onClick={() => handleSort("name")}
-          className={`${
-            sortBy === "name" ? "bg-orange-400" : "bg-orange-700"
-          } text-white px-5 py-2 mr-5`}
+          onClick={() => setSortBy("name")}
+          className={
+            sortBy === "name"
+              ? "bg-orange-500 p-1 m-2 w-28 text-white"
+              : "bg-orange-700 p-1 m-2 w-28 text-white"
+          }
         >
           Name
         </button>
         <button
-          onClick={() => handleSort("category")}
-          className={`${
-            sortBy === "category" ? "bg-orange-400" : "bg-orange-700"
-          } text-white px-5 py-2 mr-5`}
+          onClick={() => setSortBy("category")}
+          className={
+            sortBy === "category"
+              ? "bg-orange-500 p-1 m-2 w-28 text-white"
+              : "bg-orange-700 p-1 m-2 w-28 text-white"
+          }
         >
           Category
         </button>
-
-        <button
-          onClick={() => handleSort("group by category")}
-          className={`${
-            sortBy === "group by category" ? "bg-orange-400" : "bg-orange-700"
-          } text-white px-5 py-2 mr-5`}
-        >
-          Group By Category
-        </button>
       </div>
-      {sortBy === "group by category"
-        ? Object.keys(sortedItems).map((category) => (
-            <div key={category}>
-              <h3 className="text-2xl font-bold mt-5">
-                {capitalizeWords(category)}
-              </h3>
-              <ul>
-                {sortedItems[category].map((item) => (
-                  <Item
-                    key={item.id}
-                    name={item.name}
-                    quantity={item.quantity}
-                    category={item.category}
-                    onSelect={onItemSelect}
-                  />
-                ))}
-              </ul>
-            </div>
-          ))
-        : sortedItems.map((item) => (
-            <Item
-              key={item.id}
-              name={item.name}
-              quantity={item.quantity}
-              category={item.category}
-              onSelect={onItemSelect}
-            />
-          ))}
+      <div>
+        {sortedItems.map((item) => (
+          <Item
+            key={item.id}
+            name={item.name}
+            quantity={item.quantity}
+            category={item.category}
+            onSelect={onItemSelect}
+          />
+        ))}
+      </div>
     </div>
   );
 }
