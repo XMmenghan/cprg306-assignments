@@ -1,60 +1,40 @@
 "use client";
 
-import { View, Text } from "react";
-import React from "react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import ItemList from "./item-list";
 
-export default function page() {
-  const [randomDogUrl, setRandomDogUrl] = useState(null);
-  const [dogBreeds, setDogBreeds] = useState([]);
-  const [selectedBreed, setSelectedBreed] = useState("");
+import initialItems from "./item.json";
+import NewItem from "./new-item";
+import IdeaMeals from "./meal-ideas";
 
-  const getRandomDog = async (breed) => {
-    const response = breed
-      ? await fetch(`https://dog.ceo/api/breed/${breed}/images/random`)
-      : await fetch("https://dog.ceo/api/breeds/image/random");
-    const data = await response.json();
-    // const data = response.json(); this is a promise and not the actual data
-    const url = data.message;
-    setRandomDogUrl(url);
+export default function Page() {
+  const [items, setItems] = useState(initialItems);
+  const [selectedItemName, setSelectedItemName] = useState("");
+
+  const handleAddItem = (item) => {
+    setItems((prevItems) => [...prevItems, item]);
   };
 
-  const getDogBreeds = async () => {
-    const response = await fetch("https://dog.ceo/api/breeds/list/all");
-    const data = await response.json();
-    const breeds = Object.keys(data.message); //get the keys of the object
-    setDogBreeds(breeds);
+  const handleItemSelect = (name) => {
+    name = name.replace(
+      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+      ""
+    );
+    setSelectedItemName(name);
   };
-
-  const handleBreedChange = (e) => {
-    setSelectedBreed(e.target.value);
-  };
-
-  useEffect(() => {
-    getRandomDog();
-    getDogBreeds();
-  }, []); //empty array means run once
-
-  useEffect(() => {
-    if (selectedBreed === "") return;
-    getRandomDog(selectedBreed);
-  }, [selectedBreed]); //run when selectedBreed changes
 
   return (
-    <div>
-      <h1>Week 8</h1>
-      <div>
-        <select onChange={handleBreedChange}>
-          {dogBreeds.map((breed) => (
-            <option key={breed} value={breed}>
-              {breed}
-            </option>
-          ))}
-        </select>
+    <main className="bg-slate-950 m-2">
+      <h1 className="text-5xl font-bold p-5">Shopping List</h1>
+      <div className="flex flex-row">
+        <div>
+          <NewItem onAddItem={handleAddItem} />
+          <ItemList items={items} onItemSelect={handleItemSelect} />
+        </div>
+        <div>
+          <IdeaMeals ingredient={selectedItemName} />
+        </div>
       </div>
-      <p>
-        <img src={randomDogUrl} />
-      </p>
-    </div>
+    </main>
   );
 }
