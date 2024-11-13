@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Item from "./item";
+import { useState, useEffect } from "react";
+import React from "react";
 
-export default function IdeaMeals({ ingredient }) {
+export default function MealIdeas({ ingredient }) {
   const [meals, setMeals] = useState(null);
   const [mealDetails, setMealDetails] = useState(null);
 
@@ -39,20 +39,22 @@ export default function IdeaMeals({ ingredient }) {
 
   return (
     <div>
-      <h2 className="text-3xl font-bold">Meal Ideas</h2>
+      <h2 className="text-3xl font-bold text-white m-2 p-4">Meal Ideas</h2>
 
       {meals === null && (
-        <p className="text-2xl">Select an item to see meal ideas</p>
+        <p className="text-2xl  text-white m-2 p-4">
+          Select an item to see meal ideas
+        </p>
       )}
       {meals && meals.length === 0 && (
-        <p className="text-2xl">No meal ideas found for {ingredient}</p>
+        <p className="text-2xl ">No meal ideas found for {ingredient}</p>
       )}
       {meals && meals.length > 0 && (
         <div>
-          <p className="text-2xl">
+          <p className="text-2xl  text-white m-2 p-4">
             Here are some meal ideas using {ingredient}
           </p>
-          <ul>
+          <ul className=" text-white m-2 p-4">
             {meals.map((meal) => (
               <li
                 key={meal.idMeal}

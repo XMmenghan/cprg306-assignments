@@ -1,40 +1,41 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import ItemList from "./item-list";
-
-import initialItems from "./item.json";
-import NewItem from "./new-item";
-import IdeaMeals from "./meal-ideas";
+import { useState } from "react";
+import React from "react";
+import { useUserAuth } from "./_utils/auth-context";
 
 export default function Page() {
-  const [items, setItems] = useState(initialItems);
-  const [selectedItemName, setSelectedItemName] = useState("");
+  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
 
-  const handleAddItem = (item) => {
-    setItems((prevItems) => [...prevItems, item]);
+  const login = async () => {
+    try {
+      await gitHubSignIn();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleItemSelect = (name) => {
-    name = name.replace(
-      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
-      ""
-    );
-    setSelectedItemName(name);
+  const logout = async () => {
+    try {
+      await firebaseSignOut();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <main className="bg-slate-950 m-2">
-      <h1 className="text-5xl font-bold p-5">Shopping List</h1>
-      <div className="flex flex-row">
-        <div>
-          <NewItem onAddItem={handleAddItem} />
-          <ItemList items={items} onItemSelect={handleItemSelect} />
-        </div>
-        <div>
-          <IdeaMeals ingredient={selectedItemName} />
-        </div>
-      </div>
+    <main>
+      <h1>Week 9 Assignment</h1>
+      <p>
+        {user ? (
+          <div>
+            <p>Welcome, {user.displayName}</p>
+            <button onClick={logout}>Logout</button>
+          </div>
+        ) : (
+          <button onClick={login}>Login with GitHub</button>
+        )}
+      </p>
     </main>
   );
 }
