@@ -5,10 +5,21 @@ import ItemList from "./item-list";
 import NewItem from "./new-item";
 import itemsJson from "./item.json";
 import MealIdeas from "./meal-ideas";
+import { useUserAuth } from "../_utils/auth-context";
 
 export default function Page() {
   const [items, setItems] = useState(itemsJson); // use itemsJson as initial state
   const [selectedItemName, setSelectedItemName] = useState("");
+  const { user } = useUserAuth();
+
+  if (!user) {
+    return (
+      <main>
+        <h1>Week 9 Assignment</h1>
+        <p>You need to login to view this page. </p>
+      </main>
+    );
+  }
 
   // handle adding new item
   const handleAddItem = (newItem) => {

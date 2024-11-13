@@ -30,6 +30,9 @@ export default function Page() {
         {user ? (
           <div>
             <p>Welcome, {user.displayName}</p>
+            <p className="font-bold text-lg">
+              <a href="/week-9/shopping-list">Week 9 Assignment</a>
+            </p>
             <button onClick={logout}>Logout</button>
           </div>
         ) : (

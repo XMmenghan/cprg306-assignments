@@ -47,7 +47,9 @@ export default function MealIdeas({ ingredient }) {
         </p>
       )}
       {meals && meals.length === 0 && (
-        <p className="text-2xl ">No meal ideas found for {ingredient}</p>
+        <p className="text-2xl text-white m-2 p-4">
+          No meal ideas found for {ingredient}
+        </p>
       )}
       {meals && meals.length > 0 && (
         <div>
@@ -63,7 +65,7 @@ export default function MealIdeas({ ingredient }) {
               >
                 {meal.strMeal}
                 {mealDetails && mealDetails.idMeal === meal.idMeal && (
-                  <div className="text-gray-500 text-base font-normal">
+                  <div className="text-white text-base font-normal">
                     <p className="pl-5">Ingredients needed:</p>
                     {Array.from({ length: 20 }, (_, i) => i + 1)
                       .map((index) => ({
